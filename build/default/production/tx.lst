@@ -1,0 +1,95 @@
+
+
+Microchip MPLAB XC8 Assembler V2.46 build 20240104201356 
+                                                                                                           Tue May  7 14:06:39 2024
+
+
+     1                           	processor	16F1719
+     2                           	pagewidth 132
+     3                           	psect	udata_shr,global,class=COMMON,space=1,delta=1,noexec
+     4                           	psect	udata,global,class=RAM,space=1,delta=1,noexec
+     5                           	psect	udata_bank0,global,class=BANK0,space=1,delta=1,noexec
+     6                           	psect	udata_bank1,global,class=BANK1,space=1,delta=1,noexec
+     7                           	psect	udata_bank2,global,class=BANK2,space=1,delta=1,noexec
+     8                           	psect	udata_bank3,global,class=BANK3,space=1,delta=1,noexec
+     9                           	psect	udata_bank4,global,class=BANK4,space=1,delta=1,noexec
+    10                           	psect	udata_bank5,global,class=BANK5,space=1,delta=1,noexec
+    11                           	psect	udata_bank6,global,class=BANK6,space=1,delta=1,noexec
+    12                           	psect	udata_bank7,global,class=BANK7,space=1,delta=1,noexec
+    13                           	psect	udata_bank8,global,class=BANK8,space=1,delta=1,noexec
+    14                           	psect	udata_bank9,global,class=BANK9,space=1,delta=1,noexec
+    15                           	psect	udata_bank10,global,class=BANK10,space=1,delta=1,noexec
+    16                           	psect	udata_bank11,global,class=BANK11,space=1,delta=1,noexec
+    17                           	psect	udata_bank12,global,class=BANK12,space=1,delta=1,noexec
+    18                           	psect	udata_bank13,global,class=BANK13,space=1,delta=1,noexec
+    19                           	psect	udata_bank14,global,class=BANK14,space=1,delta=1,noexec
+    20                           	psect	udata_bank15,global,class=BANK15,space=1,delta=1,noexec
+    21                           	psect	udata_bank16,global,class=BANK16,space=1,delta=1,noexec
+    22                           	psect	udata_bank17,global,class=BANK17,space=1,delta=1,noexec
+    23                           	psect	udata_bank18,global,class=BANK18,space=1,delta=1,noexec
+    24                           	psect	udata_bank19,global,class=BANK19,space=1,delta=1,noexec
+    25                           	psect	udata_bank20,global,class=BANK20,space=1,delta=1,noexec
+    26                           	psect	udata_bank21,global,class=BANK21,space=1,delta=1,noexec
+    27                           	psect	udata_bank22,global,class=BANK22,space=1,delta=1,noexec
+    28                           	psect	udata_bank23,global,class=BANK23,space=1,delta=1,noexec
+    29                           	psect	udata_bank24,global,class=BANK24,space=1,delta=1,noexec
+    30                           	psect	udata_bank25,global,class=BANK25,space=1,delta=1,noexec
+    31                           	psect	code,global,class=CODE,delta=2
+    32                           	psect	data,global,class=STRCODE,delta=2,noexec
+    33                           	psect	txfunc,local,reloc=2,class=CODE,delta=1
+    34                           	psect	pa_nodes0,global,class=CODE,delta=2
+    35  007F                     
+    36                           	psect	data
+    37  0000                     stk_offset	set	0
+    38  0000                     auto_size	set	0
+    39                           
+    40                           ; stack_auto defines a symbol /name/_offset which equates to the
+    41                           ; stack offset of the auto object in question
+    42  0000'                    
+    43                           ; stack_param defines a symbol /name/_offset which equates to the
+    44                           ; stack offset of the parameter object in question
+    45  0000'                    
+    46                           ; alloc_stack adjusts the SP to allocate space for auto objects
+    47                           ; it also links in to the btemp symbol so that can be used
+    48  0000'                    
+    49                           ; restore_stack adjusts the SP to remove all auto and parameter
+    50                           ; objects from the stack prior to returning from a function
+    51  0000'                    	; Variable définie dans main.c ; Tableau (256 octets = 64 x 4) des composantes RGBW de la matrice 
+      +                          LED (1 octet/couleur/LED)
+    52                           
+    53                           	psect	txfunc
+    54  0000'                    _TX_64LEDS:	
+    55                           ; When assembly code is placed in a psect, it can be manipulated as a
+    56                           ; whole by the linker and placed in memory.
+    57                           ; -----------------------------------------------------------------
+    58                           ; GLOBALS
+    59                           ;
+    60                           ; Déclaration de fonctions et variables globales permettant au code C et à l'asm de les partager
+    61                           ; Une même fonction ou variable côté asm est préfixée par un underscore, et ne l'est pas côté
+      +                           C
+    62                           ; Avec ce formalisme, elles sont utilisables de façon intercangeable et transparente :
+    63                           ; | ---- asm ----- | ------------- C ----------------- |
+    64                           ; | _TX_64LEDS <--|--> void TX_64LEDS(void) |
+    65                           ; | _pC <--|--> volatile const char * pC |
+    66                           ; | _LED_MATRIX <--|--> volatile char LED_MATRIX [256] |
+    67                           ; Fonction globales
+    68                           ; Constantes/variables globales
+    69                           
+    70                           
+    71                           ; Cette fonction envoie sur CMD_MATRIX l'intégralité de la matrice LED_MATRIX,
+    72                           ; Chaque bit de chaque octet encodé en largeur d'impulsion
+    73                           ; Place un pointeur au début de la matrice LED_MATRIX
+    74                           ; Voir section 10.8.12 (p. 150) de la datasheet PIC18F25K40
+    75  0000' 0084               	movwf	4
+    76  0001' 0085               	movwf	5
+    77                           
+    78                           ; Envoie la commande pour piloter chacune des 64 LEDs
+    79                           ; TODO
+    80  0002' 0008               	return
+
+
+Microchip Technology PIC Macro Assembler V2.46 build 20240104201356 
+Symbol Table                                                                                               Tue May  7 14:06:39 2024
+
+                             _pC 0000*                            FSR0H 0005                             FSR0L 0004  
+                      _TX_64LEDS 0000                       _LED_MATRIX 0000* 
